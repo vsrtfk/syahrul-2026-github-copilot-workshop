@@ -51,4 +51,13 @@ export const api = {
       method: 'POST',
     }),
   getRequisitionOpenLines: (id) => apiFetch(`/api/requisitions/${id}/open-lines`),
+  listPurchaseOrders: () => apiFetch('/api/purchase-orders'),
+  getPurchaseOrder: (id) => apiFetch(`/api/purchase-orders/${id}`),
+  toggleBookmark: (itemType, itemId) =>
+    apiFetch('/api/bookmarks/toggle', {
+      method: 'POST',
+      body: JSON.stringify({ itemType, itemId }),
+    }),
+  getBookmarks: () => apiFetch('/api/bookmarks'),
+  isBookmarked: (itemType, itemId) => apiFetch(`/api/bookmarks/check/${itemType}/${itemId}`),
 };

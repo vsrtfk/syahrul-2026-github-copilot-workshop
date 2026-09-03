@@ -4,11 +4,10 @@
       <div class="page-header-left">
         <RouterLink to="/" class="back-btn" title="Back to Dashboard">&#8592;</RouterLink>
         <div>
-          <h2>Purchase Requisitions</h2>
-          <p class="muted">All purchase requisition records</p>
+          <h2>Purchase Orders</h2>
+          <p class="muted">All purchase order records</p>
         </div>
       </div>
-      <RouterLink class="btn btn-outline" to="/requisitions/new">+ New PR</RouterLink>
     </div>
 
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -18,12 +17,10 @@
         <thead>
           <tr>
             <th>Bookmark</th>
-            <th>PR Number</th>
-            <th>Requester</th>
-            <th>Department</th>
-            <th>Title</th>
+            <th>PO Number</th>
+            <th>Vendor</th>
             <th>Status</th>
-            <th>Needed By</th>
+            <th>Created</th>
           </tr>
         </thead>
         <tbody>
@@ -33,14 +30,12 @@
                 {{ bookmarkedIds.has(item.id) ? '★' : '☆' }}
               </button>
             </td>
-            <td><RouterLink :to="`/requisitions/${item.id}`">{{ item.prNumber }}</RouterLink></td>
-            <td>{{ item.requesterName }}</td>
-            <td>{{ item.departmentName }}</td>
-            <td>{{ item.title }}</td>
+            <td><RouterLink :to="`/purchase-orders/${item.id}`">{{ item.poNumber }}</RouterLink></td>
+            <td>{{ item.vendorName }}</td>
             <td>
               <span class="status-badge" :class="item.status.toLowerCase()">{{ item.status }}</span>
             </td>
-            <td>{{ item.neededByDate || '-' }}</td>
+            <td>{{ item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '-' }}</td>
           </tr>
         </tbody>
       </table>
@@ -60,7 +55,7 @@ const bookmarkedIds = ref(new Set());
 async function loadBookmarks() {
   const states = await Promise.all(
     items.value.map(async (item) => {
-      const result = await api.isBookmarked('PR', item.id);
+      const result = await api.isBookmarked('PO', item.id);
       return { id: item.id, isBookmarked: result.data?.isBookmarked };
     })
   );
@@ -70,7 +65,7 @@ async function loadBookmarks() {
 
 async function handleToggle(itemId) {
   try {
-    const response = await api.toggleBookmark('PR', itemId);
+    const response = await api.toggleBookmark('PO', itemId);
     if (response?.data?.bookmarked) {
       bookmarkedIds.value.add(itemId);
     } else {
@@ -84,7 +79,7 @@ async function handleToggle(itemId) {
 
 onMounted(async () => {
   try {
-    const payload = await api.listRequisitions();
+    const payload = await api.listPurchaseOrders();
     items.value = payload.items || [];
     await loadBookmarks();
   } catch (error) {
