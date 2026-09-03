@@ -267,6 +267,18 @@ td a {
   justify-content: flex-end;
 }
 
+.bookmark-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
 /* ===== Form fields (Figma style) ===== */
 .form-section-title {
   font-size: 14px;

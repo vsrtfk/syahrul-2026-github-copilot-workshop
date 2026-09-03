@@ -3,6 +3,7 @@ import cors from '@fastify/cors';
 import dbPlugin from './plugins/db.js';
 import requisitionRoutes from './routes/requisition-routes.js';
 import purchaseOrderRoutes from './routes/purchase-order-routes.js';
+import bookmarkRoutes from './routes/bookmark-routes.js';
 
 export function buildApp() {
   const app = Fastify({ logger: true });
@@ -14,6 +15,7 @@ export function buildApp() {
   app.register(dbPlugin);
   app.register(requisitionRoutes);
   app.register(purchaseOrderRoutes);
+  app.register(bookmarkRoutes);
 
   app.get('/health', async () => ({ status: 'ok' }));
 
